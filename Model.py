@@ -52,10 +52,28 @@ class Model:
 
 
     def __init__(self, model: str):
-        self.client = OpenAI(
-            base_url="https://openrouter.ai/api/v1",
-            api_key= os.getenv("DEEPSEEK_API_KEY"),
-        )
+        # Prefer DEEPSEEK_API_KEY (used with OpenRouter), else use OPENAI_API_KEY (official OpenAI)
+        ds_key = os.getenv("DEEPSEEK_API_KEY")
+        oa_key = os.getenv("OPENAI_API_KEY")
+        api_key = ds_key or oa_key
+        if not api_key:
+            raise RuntimeError(
+                "No API key found. Set DEEPSEEK_API_KEY (preferred for OpenRouter) or OPENAI_API_KEY in your environment or .env"
+            )
+
+        # If we have a DEEPSEEK / OpenRouter key, point the client at openrouter.ai
+        # Otherwise, if user provided an OpenAI key, let the client use the default OpenAI endpoint.
+        if ds_key:
+            self.client = OpenAI(
+                base_url="https://openrouter.ai/api/v1",
+                api_key=api_key,
+            )
+        else:
+            # don't pass base_url when using real OpenAI API key
+            self.client = OpenAI(
+                api_key=api_key,
+            )
+
         self.model = model
     
     def query(self, prompt: str) -> str:

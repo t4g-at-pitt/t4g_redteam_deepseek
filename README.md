@@ -56,18 +56,68 @@ cd t4g_redteam_deepseek
 ```
 
 ### Install Dependencies
-**Using Conda**
+
+## Quick Setup — Pip (Linux / macOS / Windows)      
+
+Follow these steps to create a local Python environment, install project dependencies with `pip`, and prepare a `.env` file. Do not add real API keys to the repo — wait to receive keys and then add them locally as described below.
+
+Linux / macOS (bash / zsh):
+
 ```bash
-conda create --name redteam_env --file requirements.txt
-#OR
-conda create -n readteam_env pandas openai
-#then activate the env
-conda activate redteam_env
+# create and activate a venv
+python3 -m venv .venv
+source .venv/bin/activate
+
+# upgrade pip and install project requirements
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+
+# copy the example env file (do NOT commit your .env)
+cp .env.example .env
+# Edit .env and paste the real keys when you receive them
+$EDITOR .env
+
+# run the app
+python main.py
 ```
-**Using pip**
-```bash
-pip install pandas openai
+
+Windows (PowerShell):
+
+```powershell
+# create and activate a venv
+py -3 -m venv .venv
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv\Scripts\Activate.ps1
+
+# upgrade pip and install requirements
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+
+# copy example env and edit (use Notepad or VS Code)
+copy .env.example .env
+notepad .env
+
+# run the app
+python main.py
 ```
+
+Windows (CMD):
+
+```cmd
+py -3 -m venv .venv
+.venv\Scripts\activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+copy .env.example .env
+notepad .env
+python main.py
+```
+
+Notes:
+- The project uses environment variables to store API keys. Do not commit `.env` (the repo includes a `.gitignore` entry for this).
+- If your machine needs a special PyTorch or CUDA build, follow the instructions at https://pytorch.org/get-started/locally/ before running `pip install -r requirements.txt`.
+- After you receive API keys, paste them into the local `.env` file in the format `OPENAI_API_KEY=sk-...` or `DEEPSEEK_API_KEY=or-...` depending on which provider you're using.
+
 
 ## Usage
 ### Using the modules
